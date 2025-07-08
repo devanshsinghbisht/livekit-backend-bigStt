@@ -7,15 +7,15 @@ const {
 } = require("livekit-server-sdk");
 const path = require("path");
 
+require("dotenv").config();
 
-const LIVEKIT_HOST = "";
-const LIVEKIT_API_KEY = "";
-const LIVEKIT_SECRET = "";
+const LIVEKIT_HOST = process.env.LIVEKIT_HOST;
+const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY;
+const LIVEKIT_SECRET = process.env.LIVEKIT_SECRET;
 
-const AWS_KEY = "";
-const AWS_SECRET = "";
-// const BUCKET_NAME = "arn:aws:s3:::rahul-bigstt";
-const BUCKET_NAME = "";
+const AWS_KEY = process.env.AWS_KEY;
+const AWS_SECRET = process.env.AWS_SECRET;
+const BUCKET_NAME = process.env.BUCKET_NAME;
 
 const egressClient = new EgressClient(
   LIVEKIT_HOST,
@@ -37,14 +37,6 @@ async function getActiveEgresses(roomName) {
 
 async function startRecording(roomName, duration = 60 * 60) {
   try {
-    // const activeRecordings = await getActiveEgresses(roomName);
-    // if (activeRecordings.length > 0) {
-    //   console.log(
-    //     "Active recording found, not starting a new one",
-    //     activeRecordings[0].result
-    //   );
-    //   return {};
-    // }
     const outputs = {
       segments: new SegmentedFileOutput({
         filenamePrefix: roomName + "-" + Date.now(),
@@ -67,7 +59,7 @@ async function startRecording(roomName, duration = 60 * 60) {
     if (activeRecordings.length > 0) {
       return {
         message: "Recording already started",
-        data: activeRecordings[0].result,
+        data: activeRecordings[0],
       };
     }
       
@@ -111,4 +103,3 @@ async function stopRecording(egressId) {
 }
 
 module.exports = { startRecording, stopRecording };
-// EG_Nxb7Wu6Uquss

@@ -2,11 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
-const { startRecording, stopRecording } = require("../recording");
+const { startRecording, stopRecording } = require("./recording");
 
 require("dotenv").config();
 
-// const cors = require("cors")
 const app = express();
 const PORT = 8000;
 
@@ -18,15 +17,16 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
-require("dotenv").config();
+
 app.use(cookieParser());
 app.use("/public", express.static(path.join(__dirname, "public")));
 // app.use(cors())
 
 app.post("/start-recording", async (req, res) => {
-  await startRecording(req.body.roomName);
+  const result = await startRecording(req.body.roomName);
   res.send({
     message: "Success",
+    data : result
   });
 });
 
